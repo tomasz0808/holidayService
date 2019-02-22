@@ -16,25 +16,23 @@ public class ExternalCall {
 	
 	public ExternalCall(Client client) {
 		this.client = client;	
-		setTargetUrl();
+		this.wTarget = client.target(RESOURCE_URL);
 	}
+
 	
-	public void setRequestParams(String apiKey, String countryCode, LocalDate date) {
+	public void getHolidayInMonth(String apiKey, String countryCode, LocalDate date) {
 		//query params must be chained together as they return a new target instance
 		wTarget=wTarget.queryParam("key", apiKey)
 				.queryParam("country", countryCode)
 				.queryParam("year", String.valueOf(date.getYear()))
-				.queryParam("month", String.valueOf(date.getMonthValue()))
-				.queryParam("day", String.valueOf(date.getDayOfMonth()));
+				.queryParam("month", String.valueOf(date.getMonthValue()));			
 	}
 	
-	public void setTargetUrl() {
-		wTarget = client.target(RESOURCE_URL);
-	}
+
 	
-	public Response executeCall() {
-		Response res = wTarget.request().get();
-		return res;
+	public String executeCall() {
+		String response = wTarget.request().get().readEntity(String.class);
+		return response;
 	}
 
 }

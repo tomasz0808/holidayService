@@ -34,15 +34,11 @@ public class InputObject {
 	@NotNull(message = "format yyyy-MM-dd is required")
 	private LocalDate date;
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//		
-//	public InputObject() {
-//		// TODO Auto-generated constructor stub
-//	}
 	
 	@JsonCreator
-	public InputObject(@JsonProperty("name1") String firstCode, @JsonProperty("name2") String secondCode, @JsonProperty("date") String date) {
-		this.name1 = firstCode;
-		this.name2 = secondCode;
+	public InputObject(@JsonProperty("date") String date) {
+//		this.name1 = firstCode;
+//		this.name2 = secondCode;
 		try {
 			this.date = LocalDate.parse(date, formatter);
 		} catch (DateTimeParseException e) {
