@@ -14,12 +14,11 @@ import javax.ws.rs.core.Response;
 
 import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import holiday.service.api.HolidayFull;
 import holiday.service.api.InputObject;
-import holiday.service.api.ResponseFull;
 import holiday.service.client.ExternalCall;
 
 @Path("/searchHoliday")
@@ -32,9 +31,9 @@ public class HolidayResource {
 	
 	private ObjectMapper mapper;
 	
-	private ResponseFull apiResponse;
-	
-	private boolean found = false;
+	private HolidayFull firstCountry;
+	private HolidayFull secondCountry;
+
 	
 	
 	public HolidayResource(String apiKey, Client client) {
@@ -47,24 +46,27 @@ public class HolidayResource {
 	@Timed
 	public Response getHoliday(@NotNull @Valid InputObject input) throws JsonParseException, JsonMappingException, IOException {
 		date = input.getDate();
-		do {
-			//get first country holidays in specified month
-			client.getHolidayInMonth(apiKey, input.getName1(), date);
-			
-			
-		}while(!found);
-		//get first country holidays in specified month
-		client.getHolidayInMonth(apiKey, input.getName1(), input.getDate());
-
+		//get holidays in specified year for the first country code
+		Response response = client.getHolidayByYear(apiKey, input.getName1(), date);
 		
+		//check if request to HolidayApi was successful
+		if(response.getStatus() == 200) {
+			firstCountry = mapper.readValue(response.readEntity(String.class), HolidayFull.class);
+			firstCountry.getStatus();
+		} else {
+			return response;
+		}
 		
-		String resp = client.executeCall();
+		// get holidays in specified year for the second country code
+		response = client.getHolidayByYear(apiKey, input.getName2(), date);
+		// check if request to HolidayApi was successful
+		if (response.getStatus() == 200) {
+			secondCountry = mapper.readValue(response.readEntity(String.class), HolidayFull.class);
+			secondCountry.getStatus();
+		} else {
+			return response;
+		}
 		
-		
-		apiResponse = mapper.readValue(resp, ResponseFull.class);
-		apiResponse.getStatus();
-		
-
 		return null;
 	}
 

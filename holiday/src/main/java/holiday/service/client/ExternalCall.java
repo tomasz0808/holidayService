@@ -20,12 +20,15 @@ public class ExternalCall {
 	}
 
 	
-	public void getHolidayInMonth(String apiKey, String countryCode, LocalDate date) {
+	public Response getHolidayByYear(String apiKey, String countryCode, LocalDate date) {
 		//query params must be chained together as they return a new target instance
 		wTarget=wTarget.queryParam("key", apiKey)
 				.queryParam("country", countryCode)
-				.queryParam("year", String.valueOf(date.getYear()))
-				.queryParam("month", String.valueOf(date.getMonthValue()));			
+				.queryParam("year", String.valueOf(date.getYear()));
+		
+//		String response = wTarget.request().get().readEntity(String.class);
+		//execute request
+		return wTarget.request().get();	
 	}
 	
 
