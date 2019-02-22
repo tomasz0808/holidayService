@@ -11,11 +11,9 @@ import javax.ws.rs.core.Response;
 public class ExternalCall {
 	
 	private static final String RESOURCE_URL = "https://holidayapi.com/v1/holidays";
-	private Client client;
 	private WebTarget wTarget;
 	
 	public ExternalCall(Client client) {
-		this.client = client;	
 		this.wTarget = client.target(RESOURCE_URL);
 	}
 

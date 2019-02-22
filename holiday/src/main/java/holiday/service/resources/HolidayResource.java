@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import holiday.service.api.Comparator;
 import holiday.service.api.HolidayFull;
 import holiday.service.api.InputObject;
 import holiday.service.client.ExternalCall;
@@ -33,6 +34,8 @@ public class HolidayResource {
 	
 	private HolidayFull firstCountry;
 	private HolidayFull secondCountry;
+	
+	private Comparator hComparator; 
 
 	
 	
@@ -66,6 +69,12 @@ public class HolidayResource {
 		} else {
 			return response;
 		}
+		
+		hComparator = new Comparator(firstCountry, secondCountry);
+		hComparator.findCommon(date.toString());
+		
+		String commonKey = hComparator.getCommonKey();
+		
 		
 		return null;
 	}
