@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import holiday.service.health.ApiKeyHealthCheck;
 import holiday.service.resources.HolidayResource;
 import io.dropwizard.Application;
+import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
@@ -29,13 +30,20 @@ public class HolidayApplication extends Application<HolidayConfiguration> {
 
     @Override
     public void run(final HolidayConfiguration configuration, final Environment environment) {
+    	//register resources
     	LOGGER.info("Registering REST resources");
     	final HolidayResource hResource = new HolidayResource(configuration.getApiKey());
     	environment.jersey().register(hResource);
     	
+    	
     	//register health check
+    	LOGGER.info("Registering heath check");
     	final ApiKeyHealthCheck apiHealthCheck = new ApiKeyHealthCheck(configuration.getApiKey());
     	environment.healthChecks().register("API key check", apiHealthCheck);
+    	
+    	
+    	
+    	environment.jersey().register(new JsonProcessingExceptionMapper(true));
     	
     	
     	
