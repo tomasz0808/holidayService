@@ -1,11 +1,14 @@
 package holiday.service;
 
+import javax.ws.rs.client.Client;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import holiday.service.health.ApiKeyHealthCheck;
 import holiday.service.resources.HolidayResource;
 import io.dropwizard.Application;
+import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -30,11 +33,14 @@ public class HolidayApplication extends Application<HolidayConfiguration> {
 
     @Override
     public void run(final HolidayConfiguration configuration, final Environment environment) {
+    	//Jersey client to make external calls
+    	final Client client = new JerseyClientBuilder(environment).using(configuration.getJerseyClientConfiguration()).build(getName());
+//    	environment.jersey().register(new ExternalCall(client));
+    	
     	//register resources
     	LOGGER.info("Registering REST resources");
-    	final HolidayResource hResource = new HolidayResource(configuration.getApiKey());
+    	final HolidayResource hResource = new HolidayResource(configuration.getApiKey(), client);
     	environment.jersey().register(hResource);
-    	
     	
     	//register health check
     	LOGGER.info("Registering heath check");
@@ -44,9 +50,6 @@ public class HolidayApplication extends Application<HolidayConfiguration> {
     	
     	
     	environment.jersey().register(new JsonProcessingExceptionMapper(true));
-    	
-    	
-    	
     }
 
 }
