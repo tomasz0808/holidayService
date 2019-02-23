@@ -75,8 +75,8 @@ logging:
 ## How to run
  - clone: https://github.com/tomcio0808/holidayService.git
  - put your Holiday API key to config.yaml and save file
- - build the project with **$mvn clean install**  
- - run command: **java -jar target/holiday-1.0-SNAPSHOT.jar server config.yml** 
+ - build the project with **$mvn clean package** which will generate fat jar 
+ - run generated fat jar with command: **java -jar target/holiday-1.0-SNAPSHOT.jar server config.yml** 
  - use Postman or any other tool to communicate with service
  
  ## Assumptions
