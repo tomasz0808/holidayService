@@ -1,7 +1,5 @@
 package holiday.service.api;
 
-
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -10,66 +8,78 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import holiday.service.CommonHolidayService;
+
 /**
  * 
- * Representation class, maps incoming client JSON request into POJO 
- * Used as a serialization class for Api response
- * @author Tomasz
+ * CommonHolidayObject class represents received JSON from client. Class is also
+ * used to create JSON response to the client.
+ * 
+ * @param name1 - represents first country code
+ * @param name2 - represents second country code Max lenght for both @param
+ * name1 and @param name2 is 6 as per Holiday Api docs.
+ * 
+ * @param date  - is the date from which to start to find next common holiday
+ * 
+ * @author Tomasz Scharmach
  *
  */
 
-public class ApiHolidayObject {
-	
+public class CommonHolidayObject {
+
+	@JsonIgnore
+	private static final Logger LOGGER = LoggerFactory.getLogger(CommonHolidayService.class);
+
 	@NotEmpty
 	@Length(max = 6)
 	private String name1;
-	
+
 	@NotEmpty
 	@Length(max = 6)
 	private String name2;
-	
+
 	@NotNull(message = "format yyyy-MM-dd is required")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	
-	public ApiHolidayObject(@JsonProperty("date") String date) {
+
+	public CommonHolidayObject(@JsonProperty("date") String date) {
 		try {
 			this.date = LocalDate.parse(date, formatter);
 		} catch (DateTimeParseException e) {
+			LOGGER.error("Failed to parse date \n" + e.getMessage());
 			e.getMessage();
 		}
 	}
-	
+
 	public String getName1() {
 		return name1;
 	}
 
-	
 	public String getName2() {
 		return name2;
 	}
-	
+
 	@JsonIgnore
 	public void increaseDate(int numberOfDays) {
 		this.date = this.date.plusDays(numberOfDays);
 	}
-	
-	
-	
+
 	public LocalDate getDate() {
 		return date;
 	}
-	
+
 	public void setName1(String name1) {
 		this.name1 = name1;
 	}
-	
+
 	public void setName2(String name2) {
 		this.name2 = name2;
 	}

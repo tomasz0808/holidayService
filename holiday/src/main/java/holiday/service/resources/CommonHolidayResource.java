@@ -17,14 +17,14 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import holiday.service.api.Comparator;
+import holiday.service.api.HolidayComparator;
 import holiday.service.api.HolidayApiMultiple;
-import holiday.service.api.ApiHolidayObject;
+import holiday.service.api.CommonHolidayObject;
 import holiday.service.client.ExternalCall;
 
 @Path("/searchHoliday")
 @Produces(MediaType.APPLICATION_JSON)
-public class HolidaySearchResource {
+public class CommonHolidayResource {
 	
 	private final String apiKey;
 	private ExternalCall client;
@@ -35,13 +35,13 @@ public class HolidaySearchResource {
 	private HolidayApiMultiple firstCountry;
 	private HolidayApiMultiple secondCountry;
 	
-	private ApiHolidayObject responseObj; 
+	private CommonHolidayObject responseObj; 
 	
-	private Comparator hComparator; 
+	private HolidayComparator hComparator; 
 
 	
 	
-	public HolidaySearchResource(String apiKey, Client client) {
+	public CommonHolidayResource(String apiKey, Client client) {
 		this.apiKey = apiKey;	
 		this.client = new ExternalCall(client);
 		this.mapper = new ObjectMapper();
@@ -49,7 +49,7 @@ public class HolidaySearchResource {
 	
 	@POST
 	@Timed
-	public Response getHoliday(@NotNull @Valid ApiHolidayObject input) throws JsonParseException, JsonMappingException, IOException {
+	public Response getHoliday(@NotNull @Valid CommonHolidayObject input) throws JsonParseException, JsonMappingException, IOException {
 		//find common holiday AFTER given date
 		input.increaseDate(1);
 		date =  input.getDate();
@@ -74,18 +74,18 @@ public class HolidaySearchResource {
 			return response;
 		}
 		
-		hComparator = new Comparator(firstCountry, secondCountry);
+		hComparator = new HolidayComparator(firstCountry, secondCountry);
 		hComparator.findCommon(date.toString());
 		
 		String commonDate = hComparator.getCommonKey();
 		
 		if(commonDate != null) {
 			//set response object
-			responseObj = new ApiHolidayObject(commonDate);
+			responseObj = new CommonHolidayObject(commonDate);
 			responseObj.setName1(firstCountry.getHolidaysNames(commonDate));
 			responseObj.setName2(secondCountry.getHolidaysNames(commonDate));
 		} else {
-			responseObj = new ApiHolidayObject(date.toString());
+			responseObj = new CommonHolidayObject(date.toString());
 			responseObj.setName1("No common holidays found after give date in year "+date.getYear());	
 			responseObj.setName2("Please change input date and try again");	
 		}

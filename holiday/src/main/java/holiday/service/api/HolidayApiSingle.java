@@ -3,10 +3,17 @@ package holiday.service.api;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 /**
- * 	Class representing holiday details for specific date.
- *  * @author tomasz
+ * 
+ * Class used to deserialize Holiday Api JSON response. This class represents
+ * single holiday details for specified country and date
+ * 
+ * @param name          - name of the holiday
+ * @param date          - date of the holiday
+ * @param observed      - date of the holiday
+ * @param holidayPublic - informs if this holiday is a public holiday
+ * 
+ * @author Tomasz Scharmach
  *
  */
 

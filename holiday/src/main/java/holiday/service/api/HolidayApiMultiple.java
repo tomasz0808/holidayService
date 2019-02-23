@@ -8,10 +8,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 
- * Representation class, maps JSON respond from Holiday api containing holidays
- * (for selected country for whole year) into POJO
+ * Class used to deserialize Holiday Api JSON response. This response contains
+ * all holidays details for specified year and country.
  * 
- * @author Tomasz
+ * @param status   - request http status from Holiday Api
+ * @param holidays - map containing holidays info. Key represents date and
+ *                 values contains detailed info about this date holidays.
+ * 
+ * @author Tomasz Scharmach
  *
  */
 
@@ -38,18 +42,17 @@ public class HolidayApiMultiple {
 	public void setHolidays(Map<String, List<HolidayApiSingle>> value) {
 		this.holidays = value;
 	}
-	
+
 	@JsonIgnore
 	public String getHolidaysNames(String dateKey) {
-		String names ="";
+		String names = "";
 		List<HolidayApiSingle> holidaysInDay = holidays.get(dateKey);
-		//get all holidays names for a given day, as there might be more than one
-		for(HolidayApiSingle holiday : holidaysInDay) {
-			names += holiday.getName()+", ";
+		// get all holidays names for a given day, as there might be more than one
+		for (HolidayApiSingle holiday : holidaysInDay) {
+			names += holiday.getName() + ", ";
 		}
-	
-		//remove trailing " ," from string
-		return names.substring(0, names.length()-2);	
+		// remove trailing " ," from string
+		return names.substring(0, names.length() - 2);
 	}
-	
+
 }
