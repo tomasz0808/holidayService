@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -54,6 +55,10 @@ public class ApiHolidayObject {
 		return name2;
 	}
 	
+	@JsonIgnore
+	public void increaseDate(int numberOfDays) {
+		this.date = this.date.plusDays(numberOfDays);
+	}
 	
 	
 	

@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import holiday.service.health.ApiKeyHealthCheck;
-import holiday.service.resources.HolidayResource;
+import holiday.service.resources.HolidaySearchResource;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper;
@@ -39,7 +39,7 @@ public class HolidayApplication extends Application<HolidayConfiguration> {
     	
     	//register resources
     	LOGGER.info("Registering REST resources");
-    	final HolidayResource hResource = new HolidayResource(configuration.getApiKey(), client);
+    	final HolidaySearchResource hResource = new HolidaySearchResource(configuration.getApiKey(), client);
     	environment.jersey().register(hResource);
     	
     	//register health check

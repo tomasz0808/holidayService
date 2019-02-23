@@ -1,4 +1,12 @@
+#data mapping
+#api key
+apiKey: 611fcd43-89ff-463a-9e22-c9f99edd2add
+
+# logging settings
 logging:
-  level: INFO
-  loggers:
-    holiday.service: DEBUG
+   level: INFO
+   loggers:
+      holiday.service: DEBUG   
+      holiday.client: DEBUG
+   appenders:
+      - type: console

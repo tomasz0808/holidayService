@@ -45,10 +45,11 @@ public class HolidayApiMultiple {
 		List<HolidayApiSingle> holidaysInDay = holidays.get(dateKey);
 		//get all holidays names for a given day, as there might be more than one
 		for(HolidayApiSingle holiday : holidaysInDay) {
-			names += holiday.getName();
+			names += holiday.getName()+", ";
 		}
 	
-		return names;	
+		//remove trailing " ," from string
+		return names.substring(0, names.length()-2);	
 	}
 	
 }

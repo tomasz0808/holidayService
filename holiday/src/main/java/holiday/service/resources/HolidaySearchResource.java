@@ -24,7 +24,7 @@ import holiday.service.client.ExternalCall;
 
 @Path("/searchHoliday")
 @Produces(MediaType.APPLICATION_JSON)
-public class HolidayResource {
+public class HolidaySearchResource {
 	
 	private final String apiKey;
 	private ExternalCall client;
@@ -41,7 +41,7 @@ public class HolidayResource {
 
 	
 	
-	public HolidayResource(String apiKey, Client client) {
+	public HolidaySearchResource(String apiKey, Client client) {
 		this.apiKey = apiKey;	
 		this.client = new ExternalCall(client);
 		this.mapper = new ObjectMapper();
@@ -50,7 +50,9 @@ public class HolidayResource {
 	@POST
 	@Timed
 	public Response getHoliday(@NotNull @Valid ApiHolidayObject input) throws JsonParseException, JsonMappingException, IOException {
-		date = input.getDate();
+		//find common holiday AFTER given date
+		input.increaseDate(1);
+		date =  input.getDate();
 		//get holidays in specified year for the first country code
 		Response response = client.getHolidayByYear(apiKey, input.getName1(), date);
 		
