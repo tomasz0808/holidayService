@@ -56,9 +56,9 @@ public class CommonHolidayResource {
 
 	private HolidayComparator hComparator;
 
-	public CommonHolidayResource(String apiKey, Client client) {
+	public CommonHolidayResource(String apiKey, String apiUrl, Client client) {
 		this.apiKey = apiKey;
-		this.client = new ExternalCall(client);
+		this.client = new ExternalCall(client, apiUrl);
 		this.mapper = new ObjectMapper();
 	}
 
@@ -74,6 +74,7 @@ public class CommonHolidayResource {
 
 		// check if request to HolidayApi was successful
 		if (response.getStatus() == 200) {
+			LOGGER.info("Holiday API response code for first request: 200, ok");
 			firstCountry = mapper.readValue(response.readEntity(String.class), HolidayApiMultiple.class);
 			firstCountry.getStatus();
 		} else {
@@ -85,6 +86,7 @@ public class CommonHolidayResource {
 		response = client.getHolidayByYear(apiKey, input.getName2(), date);
 		// check if request to HolidayApi was successful
 		if (response.getStatus() == 200) {
+			LOGGER.info("Holiday API response code for second request: 200, ok");
 			secondCountry = mapper.readValue(response.readEntity(String.class), HolidayApiMultiple.class);
 			secondCountry.getStatus();
 		} else {
@@ -98,6 +100,7 @@ public class CommonHolidayResource {
 		String commonDate = hComparator.getCommonKey();
 
 		//create proper response object
+		LOGGER.info("Creating response");
 		if (commonDate != null) {
 			responseObj = new CommonHolidayObject(commonDate);
 			responseObj.setName1(firstCountry.getHolidaysNames(commonDate));

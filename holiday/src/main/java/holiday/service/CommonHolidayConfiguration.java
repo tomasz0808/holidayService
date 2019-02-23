@@ -22,6 +22,9 @@ public class CommonHolidayConfiguration extends Configuration {
 	// API key from config yaml file
 	@NotEmpty
 	private String apiKey;
+	
+	@NotEmpty
+	private String apiUrl;
 
 	@Valid
 	@NotNull
@@ -30,6 +33,11 @@ public class CommonHolidayConfiguration extends Configuration {
 	@JsonProperty
 	public String getApiKey() {
 		return apiKey;
+	}
+	
+	@JsonProperty
+	public String getApiUrl() {
+		return apiUrl;
 	}
 
 	@JsonProperty("jerseyClient")

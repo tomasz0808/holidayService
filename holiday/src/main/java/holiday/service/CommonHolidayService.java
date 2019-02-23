@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import holiday.service.health.ApiKeyHealthCheck;
+import holiday.service.health.ExternalApiHealthCheck;
 import holiday.service.resources.CommonHolidayResource;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
@@ -38,22 +39,25 @@ public class CommonHolidayService extends Application<CommonHolidayConfiguration
 	}
 
 	@Override
-	public void run(final CommonHolidayConfiguration configuration, final Environment environment) {
+	public void run(final CommonHolidayConfiguration conf, final Environment env) {
 		// Jersey client to make external calls
-		final Client client = new JerseyClientBuilder(environment).using(configuration.getJerseyClientConfiguration())
+		final Client client = new JerseyClientBuilder(env).using(conf.getJerseyClientConfiguration())
 				.build(getName());
 
 		// register resources
-		final CommonHolidayResource hResource = new CommonHolidayResource(configuration.getApiKey(), client);
-		environment.jersey().register(hResource);
+		final CommonHolidayResource hResource = new CommonHolidayResource(conf.getApiKey(), conf.getApiUrl(), client);
+		env.jersey().register(hResource);
 		LOGGER.info("Registering REST resources");
 
-		// register health check
-		final ApiKeyHealthCheck apiHealthCheck = new ApiKeyHealthCheck(configuration.getApiKey());
-		environment.healthChecks().register("API key check", apiHealthCheck);
+		// register health checks
+		final ApiKeyHealthCheck apiHealthCheck = new ApiKeyHealthCheck(conf.getApiKey());
+		env.healthChecks().register("API key no null", apiHealthCheck);
 		LOGGER.info("Registering heath checks");
+		
+		final ExternalApiHealthCheck externalHealthCheck = new ExternalApiHealthCheck(client, conf.getApiUrl(), conf.getApiKey());
+		env.healthChecks().register("External request passed", externalHealthCheck);
 
-		environment.jersey().register(new JsonProcessingExceptionMapper(true));
+		env.jersey().register(new JsonProcessingExceptionMapper(true));
 		LOGGER.info("Registering JSON Mapper Exceptions");
 	}
 

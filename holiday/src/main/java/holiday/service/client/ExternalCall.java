@@ -23,11 +23,10 @@ public class ExternalCall {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonHolidayService.class);
 
-	private static final String RESOURCE_URL = "https://holidayapi.com/v1/holidays";
 	private WebTarget wTarget;
 
-	public ExternalCall(Client client) {
-		this.wTarget = client.target(RESOURCE_URL);
+	public ExternalCall(Client client, String apiUrl) {
+		this.wTarget = client.target(apiUrl);
 	}
 
 	public Response getHolidayByYear(String apiKey, String countryCode, LocalDate date) {
