@@ -80,11 +80,10 @@ logging:
  - use Postman or any other tool to communicate with service
  
  ## Assumptions
- - Service is configured to provide historical data up to the end of 2018 with free API key. Any request containing date 2018-12-31 and
- later will get response informing about free api key restrictions.
- - Service was not tested with premium holiday API but as per design there should not be any issues.
- - Service can return multiple holiday names for specific country as it is possible that 2 or more holidays occurs the same day in one country.
-In that scenario each holiday will be seperated by a comma. Sample response with more than one holiday in United States (name2 parameter):
+ - Service is configured to provide historical data up to the end of 2018 with free API key. Any request containing date 2018-12-31 or later will get response informing about free api key restrictions.
+ - Service was not tested with premium holiday API key but as per design there should not be any issues to get response for future holidays with premium api key.
+ - Service can return multiple holiday names for specific country as it is possible that two or more holiday occurs the same day in one country.
+In that scenario each holiday name will be seperated by a comma. Sample response with more than one holiday in United States (parameter ***name2***):
  ```
  {
     "date": "2018-01-01",
@@ -92,7 +91,7 @@ In that scenario each holiday will be seperated by a comma. Sample response with
     "name2": "Last Day of Kwanzaa, New Year's Day"
 }
 ```
-- In case when no common holiday for coutries can be found approprate response will be send back by the service
+- In case when no common holiday for coutries can be found approprate response will be send back by the service.
 
 ## Additional info
 - Service has two additional health check register using dropwizard. They can be triggered with:
