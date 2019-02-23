@@ -3,8 +3,15 @@ package holiday.service.api;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
+/**
+ * 	Class representing holiday details for specific date.
+ *  * @author tomasz
+ *
+ */
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HolidaySingle {
+public class HolidayApiSingle {
 	private String name;
 	private String date;
 	private String observed;

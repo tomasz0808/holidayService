@@ -11,17 +11,18 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 
  * Representation class, maps incoming client JSON request into POJO 
+ * Used as a serialization class for Api response
  * @author Tomasz
  *
  */
 
-public class InputObject {
+public class ApiHolidayObject {
 	
 	@NotEmpty
 	@Length(max = 6)
@@ -32,13 +33,11 @@ public class InputObject {
 	private String name2;
 	
 	@NotNull(message = "format yyyy-MM-dd is required")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate date;
 	private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
-	@JsonCreator
-	public InputObject(@JsonProperty("date") String date) {
-//		this.name1 = firstCode;
-//		this.name2 = secondCode;
+	public ApiHolidayObject(@JsonProperty("date") String date) {
 		try {
 			this.date = LocalDate.parse(date, formatter);
 		} catch (DateTimeParseException e) {
@@ -56,8 +55,18 @@ public class InputObject {
 	}
 	
 	
+	
+	
 	public LocalDate getDate() {
 		return date;
+	}
+	
+	public void setName1(String name1) {
+		this.name1 = name1;
+	}
+	
+	public void setName2(String name2) {
+		this.name2 = name2;
 	}
 
 }

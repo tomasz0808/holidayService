@@ -18,8 +18,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import holiday.service.api.Comparator;
-import holiday.service.api.HolidayFull;
-import holiday.service.api.InputObject;
+import holiday.service.api.HolidayApiMultiple;
+import holiday.service.api.ApiHolidayObject;
 import holiday.service.client.ExternalCall;
 
 @Path("/searchHoliday")
@@ -32,8 +32,10 @@ public class HolidayResource {
 	
 	private ObjectMapper mapper;
 	
-	private HolidayFull firstCountry;
-	private HolidayFull secondCountry;
+	private HolidayApiMultiple firstCountry;
+	private HolidayApiMultiple secondCountry;
+	
+	private ApiHolidayObject responseObj; 
 	
 	private Comparator hComparator; 
 
@@ -47,14 +49,14 @@ public class HolidayResource {
 	
 	@POST
 	@Timed
-	public Response getHoliday(@NotNull @Valid InputObject input) throws JsonParseException, JsonMappingException, IOException {
+	public Response getHoliday(@NotNull @Valid ApiHolidayObject input) throws JsonParseException, JsonMappingException, IOException {
 		date = input.getDate();
 		//get holidays in specified year for the first country code
 		Response response = client.getHolidayByYear(apiKey, input.getName1(), date);
 		
 		//check if request to HolidayApi was successful
 		if(response.getStatus() == 200) {
-			firstCountry = mapper.readValue(response.readEntity(String.class), HolidayFull.class);
+			firstCountry = mapper.readValue(response.readEntity(String.class), HolidayApiMultiple.class);
 			firstCountry.getStatus();
 		} else {
 			return response;
@@ -64,7 +66,7 @@ public class HolidayResource {
 		response = client.getHolidayByYear(apiKey, input.getName2(), date);
 		// check if request to HolidayApi was successful
 		if (response.getStatus() == 200) {
-			secondCountry = mapper.readValue(response.readEntity(String.class), HolidayFull.class);
+			secondCountry = mapper.readValue(response.readEntity(String.class), HolidayApiMultiple.class);
 			secondCountry.getStatus();
 		} else {
 			return response;
@@ -73,10 +75,19 @@ public class HolidayResource {
 		hComparator = new Comparator(firstCountry, secondCountry);
 		hComparator.findCommon(date.toString());
 		
-		String commonKey = hComparator.getCommonKey();
+		String commonDate = hComparator.getCommonKey();
 		
-		
-		return null;
+		if(commonDate != null) {
+			//set response object
+			responseObj = new ApiHolidayObject(commonDate);
+			responseObj.setName1(firstCountry.getHolidaysNames(commonDate));
+			responseObj.setName2(secondCountry.getHolidaysNames(commonDate));
+		} else {
+			responseObj = new ApiHolidayObject(date.toString());
+			responseObj.setName1("No common holidays found after give date in year "+date.getYear());	
+			responseObj.setName2("Please change input date and try again");	
+		}
+		return Response.ok().entity(responseObj).build();
 	}
 
 	
