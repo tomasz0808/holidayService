@@ -1,12 +1,19 @@
 #data mapping
 #api key
-apiKey: 611fcd43-89ff-463a-9e22-c9f99edd2add
+apiKey: <your-holiday-api-key>
+#holiday api url
+apiUrl: https://holidayapi.com/v1/holidays
+
+server:
+  applicationConnectors:
+  - type: http
+    port: 8090
+  adminConnectors:
+  - type: http
+    port: 8091
 
 # logging settings
 logging:
    level: INFO
-   loggers:
-      holiday.service: DEBUG   
-      holiday.client: DEBUG
    appenders:
       - type: console
