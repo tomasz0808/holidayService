@@ -7,7 +7,7 @@ It allows to get historical data up to 2018.
 ## Requirements
  - Maven
  - Java JRE 1.8 or higher
- - Holiday API key (**not added to this repository**), free key can be acquired [here](https://holidayapi.com/))
+ - Holiday API key (**not added to this repository**), free key can be acquired [here](https://holidayapi.com/)
 
 ## Specification
 Service method:
@@ -28,7 +28,7 @@ Parameters:
  - date  - date after which common hoilday is being searched
  
 Date parameter must be provided in "yyyy-mm-dd" format.
-List of supported country codes can be found on Holiday API [website] (https://holidayapi.com/).
+List of supported country codes can be found on Holiday API [website](https://holidayapi.com/).
 
 ## Sample response:
 ```
@@ -39,9 +39,9 @@ List of supported country codes can be found on Holiday API [website] (https://h
 }
 ```
 Parameters:  
- - date - next holiday date common for both countries
+ - date  - next holiday date common for both countries
  - name1 - first country holidays names
- - name2  - second country holidays names
+ - name2 - second country holidays names
  
 ## Config.yaml file
 Configuration file config.yaml can be found in the root folder of the project.  
@@ -96,7 +96,7 @@ In that scenario each holiday will be seperated by a comma. Sample response with
 
 ## Additional info
 - Service has two additional health check register using dropwizard. They can be triggered with:
- - GET /healthcheck - request send to the port mapped for admin connection.
+ 	- GET /healthcheck - request send to the port mapped for admin connection.
  
  
 
