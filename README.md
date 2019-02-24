@@ -7,14 +7,14 @@ It allows to get historical data up to the end of 2018.
 ## Requirements
  - Maven
  - Java JRE 1.8 or higher
- - Holiday API key (**not added to this repository**), free key can be acquired [here](https://holidayapi.com/)
+ - Holiday API key (**not added to this repository**), free key can be acquired [here](https://holidayapi.com/).
 
 ## Specification
 Service method:
- - POST /searchHoliday - returns next holiday after given date that occured at the same day in two different countries.
+ - POST /searchHoliday - returns next holiday names and date that occured at the same day in two different countries after the date provided in the request.
 
 Service consumes and produces JSON format. 
-## Sample request:  
+## Sample request  
 ```
 {
 	"name1": "PL",
@@ -27,7 +27,8 @@ Parameters:
  - name2 - second country code
  - date  - date after which common hoilday is being searched
  
-Date parameter must be provided in "yyyy-mm-dd" format.
+This request will search for holidays that occured at the same day in Poland an United States after 2016-12-31.   
+Date parameter must be provided in "yyyy-mm-dd" format.  
 List of supported country codes can be found on Holiday API [website](https://holidayapi.com/).
 
 ## Sample response:
@@ -45,8 +46,9 @@ Parameters:
  
 ## Config.yaml file
 Configuration file config.yaml can be found in the root folder of the project.  
-It contains couple of important things(i.e. Holiday API key, service port selection, logging settings).  
-You can adjust it to your needs before running service.  
+It contains couple of important things (i.e. Holiday API key, service port selection, logging settings).  
+You can adjust it to your needs before running the service. 
+
 **Please replace `<your-holiday-api-key>` with your actual Holiday API key**  
 
 ### Sample config file:
@@ -82,7 +84,7 @@ logging:
  ## Assumptions
  - Service is configured to provide historical data up to the end of 2018 with free API key. Any request containing date 2018-12-31 or later will get response informing about free api key restrictions.
  - Service was not tested with premium holiday API key but as per design there should not be any issues to get response for future holidays with premium api key.
- - Service can return multiple holiday names for specific country as it is possible that two or more holiday occurs the same day in one country.
+ - Service can return multiple holiday names for specific country as it is possible that two or more holidays occurs the same day in one country.
 In that scenario each holiday name will be seperated by a comma. Sample response with more than one holiday in United States (parameter ***name2***):
  ```
  {
@@ -91,7 +93,7 @@ In that scenario each holiday name will be seperated by a comma. Sample response
     "name2": "Last Day of Kwanzaa, New Year's Day"
 }
 ```
-- In case when no common holiday for coutries can be found approprate response will be send back by the service.
+- In case when no common holiday for coutries can be found appropriate response will be send back by the service.
 
 ## Additional info
 - Service has two additional health check register using dropwizard. They can be triggered with:
