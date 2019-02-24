@@ -23,9 +23,8 @@ import holiday.service.CommonHolidayService;
  * used to create JSON response to the client.
  * 
  * @param name1 - represents first country code
- * @param name2 - represents second country code Max lenght for both @param
- * name1 and @param name2 is 6 as per Holiday Api docs.
- * 
+ * @param name2 - represents second country code 
+ *  
  * @param date  - is the date from which to start to find next common holiday
  * 
  * @author Tomasz Scharmach
@@ -38,11 +37,9 @@ public class CommonHolidayObject {
 	private static final Logger LOGGER = LoggerFactory.getLogger(CommonHolidayService.class);
 
 	@NotEmpty
-	@Length(max = 6)
 	private String name1;
 
 	@NotEmpty
-	@Length(max = 6)
 	private String name2;
 
 	@NotNull(message = "format yyyy-MM-dd is required")
