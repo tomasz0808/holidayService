@@ -2,7 +2,7 @@
 ## Overview
 This is a Holiday Information web service build with dropwizard v1.3.8 available on [GitHub](https://github.com/dropwizard/dropwizard/tree/release/1.3.x).  
 This web service consumes [Holiday API](https://holidayapi.com/) and it's purpose is to provide names of holidays that occurs at the same day in 2 different countries.  
-It allows to get historical data up to 2018.   
+It allows to get historical data up to the end of 2018.   
 
 ## Requirements
  - Maven
